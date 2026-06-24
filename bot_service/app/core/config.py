@@ -17,7 +17,7 @@ class Settings(BaseSettings):
     OPENROUTER_SITE_URL: str = "https://example.com"
     OPENROUTER_APP_NAME: str = "bot-service"
 
-    TELEGRAM_BOT_TOKEN: str = "8800155709:AAECfisjnR8e9nrd8u7xTSTKH46sD0t7vXI"
+    TELEGRAM_BOT_TOKEN: str = ""
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 

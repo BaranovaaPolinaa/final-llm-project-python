@@ -25,7 +25,7 @@ def _get_user_id(message: Message) -> int:
 @router.message(Command("start"))
 async def cmd_start(message: Message) -> None:
     await message.answer(
-        "👋 Привет! Я LLM-консультант.\n\n"
+        "Привет! Я LLM-консультант.\n\n"
         "Для работы необходима авторизация:\n"
         "Зарегистрируйтесь в Auth Service (Swagger: http://localhost:8000/docs)\n"
         "Получите JWT-токен через POST /auth/login\n"
@@ -71,9 +71,9 @@ async def cmd_whoami(message: Message) -> None:
     try:
         payload = decode_and_validate(token)
         await message.answer(
-            f"👤 Ваш профиль:\n"
-            f"  user_id (sub): {payload['sub']}\n"
-            f"  role: {payload.get('role', 'n/a')}"
+            f"Ваш профиль:\n"
+            f"user_id (sub): {payload['sub']}\n"
+            f"role: {payload.get('role', 'n/a')}"
         )
     except ValueError as exc:
         await message.answer(f"Токен недействителен: {exc}")

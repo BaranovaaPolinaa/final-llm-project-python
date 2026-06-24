@@ -11,6 +11,14 @@ class Settings(BaseSettings):
     RABBITMQ_URL: str = "amqp://guest:guest@localhost:5672//"
     REDIS_URL: str = "redis://localhost:6379/0"
 
+    OPENROUTER_API_KEY: str = ""
+    OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
+    OPENROUTER_MODEL: str = "cohere/north-mini-code:free"
+    OPENROUTER_SITE_URL: str = "https://example.com"
+    OPENROUTER_APP_NAME: str = "bot-service"
+
+    TELEGRAM_BOT_TOKEN: str = ""
+
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
 

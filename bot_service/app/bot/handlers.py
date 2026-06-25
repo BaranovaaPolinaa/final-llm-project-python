@@ -10,6 +10,8 @@ from app.tasks.llm_tasks import llm_request
 
 router = Router()
 
+MIN_PARTS = 2
+
 
 def _token_key(user_id: int) -> str:
     return f"token:{user_id}"
@@ -38,7 +40,7 @@ async def cmd_start(message: Message) -> None:
 @router.message(Command("token"))
 async def cmd_token(message: Message) -> None:
     parts = (message.text or "").strip().split(maxsplit=1)
-    if len(parts) < 2:
+    if len(parts) < MIN_PARTS:
         await message.answer("Использование: /token <ваш_JWT_токен>")
         return
 

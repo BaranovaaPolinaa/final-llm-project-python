@@ -6,7 +6,12 @@ from app.core.config import settings
 from app.infra.celery_app import celery_app
 
 
-@celery_app.task(name="app.tasks.llm_tasks.llm_request", bind=True, max_retries=3)
+MAX_RETRIES = 3
+TELEGRAM_MESSAGE_MAX_LENGTH = 4096
+TELEGRAM_REQUEST_TIMEOUT = 15.0
+
+
+@celery_app.task(name="app.tasks.llm_tasks.llm_request", bind=True, max_retries=MAX_RETRIES)
 def llm_request(self, tg_chat_id: int, prompt: str) -> None:
 
     try:
@@ -24,8 +29,8 @@ async def _get_llm_answer(prompt: str) -> str:
 
 async def _send_to_telegram(chat_id: int, text: str) -> None:
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-    safe_text = text[:4096] if text else "Нет ответа от модели"
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    safe_text = text[:TELEGRAM_MESSAGE_MAX_LENGTH] if text else "Нет ответа от модели"
+    async with httpx.AsyncClient(timeout=TELEGRAM_REQUEST_TIMEOUT) as client:
         try:
             response = await client.post(url, json={"chat_id": chat_id, "text": safe_text})
             if response.status_code != 200:

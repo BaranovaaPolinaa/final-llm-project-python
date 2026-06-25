@@ -24,8 +24,11 @@ async def _get_llm_answer(prompt: str) -> str:
 
 async def _send_to_telegram(chat_id: int, text: str) -> None:
     url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
+    safe_text = text[:4096] if text else "Нет ответа от модели"
     async with httpx.AsyncClient(timeout=15.0) as client:
         try:
-            await client.post(url, json={"chat_id": chat_id, "text": text})
+            response = await client.post(url, json={"chat_id": chat_id, "text": safe_text})
+            if response.status_code != 200:
+                print(f"[llm_request] Telegram error: {response.status_code} {response.text}")
         except Exception as exc:
             print(f"[llm_request] Failed to send message to {chat_id}: {exc}")
